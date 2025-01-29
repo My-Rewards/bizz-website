@@ -1,0 +1,117 @@
+.test{
+    display: flex;
+    flex:1;
+}
+
+#root{
+    display:flex;
+    flex:1;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+  }
+  
+  .Page{
+    display: flex;
+    flex-direction: column;
+    flex:1;
+    height:100%
+  }
+  
+  /* ---- Ampligy Authenticator Styling ---- */
+  [data-amplify-router]{
+    border: 0px solid black !important;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  [data-amplify-container]{
+    min-width: 100%;
+  
+    & img{
+      max-width: 500px;
+    }
+  }
+  
+  [data-amplify-authenticator]{
+    min-width: 500px;
+    width: 50vw;
+    max-width: 600px;
+  }
+  
+  .amplify-tabs{
+    background-color: white !important;
+  }
+  
+  .amplify-button--primary {
+    background-color: var(--color-1) !important;
+  }
+  
+  .amplify-tabs__item{
+    color: var(--color-9) !important;
+  
+  }
+  
+  .amplify-tabs__item.amplify-tabs__item--active{
+    color: var(--color-1) !important;
+    border-color: var(--color-1) !important;
+  }
+  
+  .amplify-button--small{
+    color: var(--color-1) !important;
+  
+    &:hover{
+      background-color: var(--color-4);
+    }
+  }
+  
+  .amplify-flex {
+    display: flex;
+    flex-wrap: wrap !important;
+    flex-direction: unset !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+  
+    & .amplify-flex.amplify-field-group.amplify-field-group--horizontal{
+      flex-wrap: nowrap !important;
+      flex-direction: row !important;
+    }
+  }
+  
+  .amplify-flex.federated-sign-in-container{
+    justify-content: center !important;
+  }
+  
+  /* Make the first two fields behave like a grid within the column */
+  .amplify-flex > .amplify-field:nth-child(1):nth-last-child(n+3),
+  .amplify-flex > .amplify-field:nth-child(2):nth-last-child(n+3) {
+    display: inline-block;
+    width: 48% !important;
+  }
+  
+  .amplify-flex > .amplify-field:nth-child(4):nth-last-child(n+2),
+  .amplify-flex > .amplify-field:nth-child(5):nth-last-child(n+1) {
+    display: inline-block;
+    width: 48% !important;
+  }
+  
+  .amplify-flex.amplify-field-group.amplify-field-group--horizontal:has(:focus){
+  
+  }
+  
+  .amplify-flex > .amplify-field:nth-child(3){
+    width:100% !important;
+  }
+  
+  .amplify-flex > .amplify-field-wrapper {
+    grid-auto-columns: repeat(fill)
+  }
+  
