@@ -24,20 +24,20 @@ export default function Reroute() {
 
         if (user.userSub && user.tokens) {
           // User is authenticated
-          if (pathname === "/Login" || pathname === "/") {
+          if (pathname === "/Auth" || pathname === "/") {
             router.push("/Organizations"); // Redirect to Dashboard if on auth or root
           }
         } else {
           // User is not authenticated
           if (pathname === "/" || pathname === "/Dashboard") {
-            router.push("/Login"); // Redirect to auth if on root or dashboard
+            router.push("/Auth"); // Redirect to auth if on root or dashboard
           }
         }
       } catch (error) {
         console.error("Error during authentication:", error);
         // If there's an error fetching the session, assume unauthenticated
         if (pathname === "/" || pathname === "/Dashboard") {
-          router.push("/Login");
+          router.push("/Auth");
         }
       }
     };

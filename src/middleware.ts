@@ -23,16 +23,16 @@ export async function middleware(request: NextRequest) {
 
   response.headers.set('authenticated', authenticated ? 'true' : 'false');
 
-  if (authenticated && path === '/Login' || path === '/Sign-Up') {
+  if (authenticated && path === '/Auth') {
     return NextResponse.redirect(new URL(`/Organizations`, request.url));
   }else if (authenticated){
     return response
   }
 
-  if(path === '/' || path === '/Login' || path === '/Sign-Up' || path === '/callback'){
+  if(path === '/' || path === '/Auth' || path === '/callback'){
     return response;
   }else {
-    return NextResponse.redirect(new URL(`/Login?redirect=${path}`, request.url));
+    return NextResponse.redirect(new URL(`/Auth?redirect=${path}`, request.url));
   }
 }
 

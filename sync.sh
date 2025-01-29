@@ -64,11 +64,11 @@ COGNITO_DOMAIN=$(echo "$PARAMS" | jq -r ".Parameters[] | select(.Name==\"/myRewa
 IDENTITY_POOL_ID=$(echo "$PARAMS" | jq -r ".Parameters[] | select(.Name==\"/myRewardsApp/$APP_ENV/identityPoolIdBusiness\").Value")
 
 # Write to .env file
-echo "USERPOOL_ID=$USER_POOL_ID" > .env
-echo "WEB_CLIENT_ID=$WEB_CLIENT_ID" >> .env
-echo "COGNITO_DOMAIN=$COGNITO_DOMAIN" >> .env
-echo "IDENTITY_POOL_ID=$IDENTITY_POOL_ID" >> .env
-echo "AWS_REGION=us-east-1" >> .env
-echo "APP_ENV=$APP_ENV" >> .env
+echo "NEXT_PUBLIC_USERPOOL_ID=$USER_POOL_ID" > .env
+echo "NEXT_PUBLIC_WEB_CLIENT_ID=$WEB_CLIENT_ID" >> .env
+echo "NEXT_PUBLIC_COGNITO_DOMAIN=$COGNITO_DOMAIN" >> .env
+echo "NEXT_PUBLIC_IDENTITY_POOL_ID=$IDENTITY_POOL_ID" >> .env
+echo "NEXT_PUBLIC_AWS_REGION=us-east-1" >> .env
+echo "NEXT_PUBLIC_APP_ENV=$APP_ENV" >> .env
 
 echo "($APP_ENV) .env file updated successfully!"

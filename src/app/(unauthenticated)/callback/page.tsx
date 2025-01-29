@@ -15,10 +15,10 @@ export default function CallBack() {
           console.log(user)
           router.push("/Organizations");
         } else {
-          router.push("/Login");
+          router.push("/Auth");
         }
       } catch {
-        router.push("/Login");
+        router.push("/Auth");
       }
     };
     checkAuth();
