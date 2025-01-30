@@ -44,10 +44,11 @@ const components = {
   Header() {
     const { tokens } = useTheme();
     return (
-      <View textAlign="center" padding={tokens.space.large}>
+      <View textAlign="center" paddingBottom={tokens.space.medium}>
         <Image
           alt="Amplify logo"
           src={logo}
+          style={{width:'80%', marginInline:'auto'}}
         />
       </View>
     );
