@@ -1,14 +1,12 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { OrgProps } from "./page";
+import Link from "next/link";
 
-export default function ClientComponent({ data }: { data: OrgProps[] }) {
-  const router = useRouter();
-    
+export default function ClientComponent({ data }: { data: OrgProps[] }) { 
   return (
-    <div style={{ display: "grid", gap: "10px" }}>
+    <div className="flex flex-1 flex-col gap-3">
       {data.map((item) => (
-        <button
+        <Link
           key={item.id}
           style={{
             padding: "15px",
@@ -17,7 +15,9 @@ export default function ClientComponent({ data }: { data: OrgProps[] }) {
             backgroundColor: item.active ? "#e0ffe0" : "#ffe0e0",
             cursor: "pointer",
           }}
-          onClick={() =>{ router.push(`/Billing/${item.id}`);  }}
+          href={`/Billing/${item.id}`}
+          shallow={false}
+          prefetch={true}
         >
           <h2 style={{ margin: "0 0 10px" }}>{item.title}</h2>
           <p>
@@ -29,7 +29,7 @@ export default function ClientComponent({ data }: { data: OrgProps[] }) {
               {item.active ? "Active" : "Inactive"}
             </span>
           </p>
-        </button>
+        </Link>
       ))}
     </div>
   );

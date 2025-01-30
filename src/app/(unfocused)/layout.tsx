@@ -10,7 +10,7 @@ export default function RootLayout({
         <div>
             <Navbar />
         </div>
-        <div>
+        <div className='flex-1 flex align-middle justify-center'>
             {children}
         </div>
     </div>

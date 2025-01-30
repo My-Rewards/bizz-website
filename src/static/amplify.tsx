@@ -10,18 +10,16 @@ export const awsConfig: ResourcesConfig = {
       loginWith: {
         oauth: {
           domain: process.env.NEXT_PUBLIC_APP_ENV === 'beta' 
-            ? 'business.beta.auth.myrewards.website'
+            ? 'business.beta.auth.myrewards.website' 
             : 'business.auth.myrewards.website',
-          scopes: ['openid', 'email', 'profile'],
+          scopes: ['openid', 'email', 'profile', 'aws.cognito.signin.user.admin'],
           redirectSignIn: [
-            'http://localhost:3000/callback',
-            `http://localhost:3000/`,
-            'https://example.com/'
+            'http://localhost:3000/', 
+            'https://beta.business.myrewards.website/'
           ],
           redirectSignOut: [
-            'http://localhost:3000/callback',
-            `http://localhost:3000/`,
-            'https://example.com/'
+            'http://localhost:3000/', 
+            'https://beta.business.myrewards.website/'
           ],
           responseType: 'code',
           providers: ['Google']

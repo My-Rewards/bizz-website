@@ -1,38 +1,13 @@
 "use client";
 import "@aws-amplify/ui-react/styles.css";
-import { useSearchParams, redirect } from "next/navigation";
-import * as Auth from "aws-amplify/auth";
-import { useEffect } from "react";
 import './login.css'
 import { Authenticator, Button, Heading, useAuthenticator, useTheme, View, Text } from "@aws-amplify/ui-react";
 import logo from '@/assets/MyRewardsLogo3.svg'
 import Image from "next/image";
 
 const Authentication = () => {
-  const searchParams = useSearchParams();
-  const origin = searchParams.get("redirect");
-
-  useEffect(() => {
-    async function checkAuthSession() {
-      try {
-        const session = await Auth.fetchAuthSession();
-        if (session && session.tokens) {
-          if (origin) {
-            redirect(origin);
-          } else {
-            redirect("/Dashboard");
-          }
-        }
-      } catch (error) {
-        console.error("No session found or user is not authenticated", error);
-      }
-    }
-
-    checkAuthSession();
-  }, [origin]);
-
   return (
-    <div className='flex flex-1 justify-center align-middle h-ful'>
+    <div className='flex flex-1 justify-center'>
       <Authenticator components={components} formFields={formFields} />
     </div>
   );

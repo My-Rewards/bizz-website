@@ -3,7 +3,7 @@ import { signOut } from "aws-amplify/auth";
 import { redirect } from "next/navigation";
 import * as React from 'react';
 
-export default function Dashboard() {
+export default function Account() {
   return (
     <div className="page-1">
       <h1> This is the Account </h1>

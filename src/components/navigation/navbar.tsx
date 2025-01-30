@@ -7,9 +7,8 @@ import Image from "next/image";
 import './navbar.css'
 
 const Navbar = () => {
-  const pathname = usePathname(); // Get the current route
+  const pathname = usePathname();
 
-  // Helper function to check if the link is active
   const isActive = (path: string) => pathname.includes(path);
   
   return (
