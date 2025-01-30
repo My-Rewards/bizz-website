@@ -17,6 +17,8 @@ export default function ClientComponent({ data }: { data: OrgProps[] }) {
             cursor: "pointer",
           }}
           href={`/Organizations/${item.id}`}
+          shallow={false}
+          prefetch={true}
         >
           <h2 style={{ margin: "0 0 10px" }}>{item.title}</h2>
           <p>

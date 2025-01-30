@@ -11,23 +11,22 @@ export async function middleware(request: NextRequest) {
   const parsedURL = new URL(request.url);
   const path = parsedURL.pathname;
 
-  return NextResponse.redirect(new URL(`/LinkAccount`, request.url));
-
+  const specialRoutes = ["/Auth", "/LinkAccount"];
+  const isSpecialRoute = specialRoutes.some(route => path.includes(route))
+  
   switch(true){
-    case (!verified && !linked && path === "/Auth"): return response;
-    case (verified && path.includes("/Auth")): return NextResponse.redirect(new URL(`/Organizations`, request.url));
-    case (verified && !linked): return NextResponse.redirect(new URL(`/LinkAccount`, request.url));
-    case (verified && linked && !path.includes("/Auth")): return response;
-    case (!verified && !linked): return NextResponse.redirect(new URL(`/Auth?redirect=${encodeURIComponent(path)}`, request.url));
-    default: return NextResponse.redirect(new URL(`/Organizations`, request.url));;
+    case (!verified && path !== "/Auth"): return NextResponse.redirect(new URL(`/Auth?redirect=${encodeURIComponent(path)}`, request.url));
+    case (verified && !linked && path !== '/LinkAccount'): return NextResponse.redirect(new URL(`/LinkAccount`, request.url));
+    case (verified && linked && isSpecialRoute): return NextResponse.redirect(new URL(`/Organizations`, request.url));;
+    default: return response
   }
 }
 
 export const config = {
   matcher: [
+    "/LinkAccount",
     "/Organizations/:path*",
     "/Billing/:path*",
-    "/LinkAccount",
     "/Account",
     "/Auth",
     "/((?!api|_next/static|_next/image|favicon.ico|).*)"

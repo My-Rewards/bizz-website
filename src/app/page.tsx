@@ -4,33 +4,28 @@ import { useRouter, usePathname } from "next/navigation";
 import { fetchAuthSession} from "@aws-amplify/auth";
 import 'aws-amplify/auth/enable-oauth-listener';
 import Loading from "@/components/loading";
+import { useCookies } from "react-cookie";
 
 export default function Reroute() {
   const router = useRouter();
   const pathname = usePathname();
+  const [cookies] = useCookies(['redirect']); 
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const session = await fetchAuthSession();
-
-        const redirect = sessionStorage.getItem("redirect");
-        sessionStorage.removeItem("redirect");      
-
-        if (redirect) {
-          router.push(redirect);
-        } else {
-          router.push("/Organizations"); 
-        }
+        console.log(cookies.redirect)
 
         if (session.userSub && session.tokens) {
-          if (pathname === "/Auth" || pathname === "/") {
+          if (cookies.redirect) {
+            router.push(cookies.redirect);
+          }
+          else if (pathname === "/Auth" || pathname === "/") {
             router.push("/Organizations");
           }
-        } else {
-          if (pathname === "/" || pathname === "/Organizations") {
-            router.push("/Auth");
-          }
+        } else if (pathname === "/" || pathname === "/Organizations") {
+          router.push("/Auth");
         }
       } catch (error) {
         console.error("Error during authentication:", error);

@@ -1,13 +1,29 @@
 "use client";
 import "@aws-amplify/ui-react/styles.css";
-import './login.css'
+import './auth.css'
 import { Authenticator, Button, Heading, useAuthenticator, useTheme, View, Text } from "@aws-amplify/ui-react";
 import logo from '@/assets/MyRewardsLogo3.svg'
 import Image from "next/image";
+import { useSearchParams } from "next/dist/client/components/navigation";
+import { useEffect } from "react";
+import { useCookies } from "react-cookie";
 
 const Authentication = () => {
+  const [, setCookie] = useCookies(["redirect"]);
+  const searchParams = useSearchParams();
+  const redirectPath = searchParams.get("redirect");
+
+  useEffect(() => {
+    if (redirectPath) {
+      setCookie("redirect", redirectPath, {
+        path: "/",
+        secure: true
+    });    
+  }
+  }, [redirectPath]);
+
   return (
-    <div className='flex flex-1 justify-center'>
+    <div className='flex flex-1 justify-center pb-5'>
       <Authenticator components={components} formFields={formFields} />
     </div>
   );

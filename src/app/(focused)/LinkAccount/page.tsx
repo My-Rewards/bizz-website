@@ -34,9 +34,9 @@ export default function LinkAccount(){
     };
 
     return (
-        <div style={{ textAlign: "center", marginTop: "50px" }}>
-            <h1>Needed to authenticate your business</h1>
-            <button onClick={redirectSquarePage}>
+        <div className='flex flex-1 flex-col justify-center align-middle'>
+            <h1 className='flex self-center'>Need to authenticate your business</h1>
+            <button onClick={redirectSquarePage} className='flex bg-amber-400 self-center p-3 rounded-2xl cursor-pointer'>
                 Link Square Account
             </button>
         </div>
