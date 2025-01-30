@@ -13,10 +13,10 @@ export async function middleware(request: NextRequest) {
 
   const specialRoutes = ["/Auth", "/LinkAccount"];
   const isSpecialRoute = specialRoutes.some(route => path.includes(route))
-  
+    
   switch(true){
     case (!verified && path !== "/Auth"): return NextResponse.redirect(new URL(`/Auth?redirect=${encodeURIComponent(path)}`, request.url));
-    case (verified && !linked && path !== '/LinkAccount'): return NextResponse.redirect(new URL(`/LinkAccount`, request.url));
+    case (verified && !linked && path !== "/LinkAccount"): return NextResponse.redirect(new URL(`/LinkAccount`, request.url));
     case (verified && linked && isSpecialRoute): return NextResponse.redirect(new URL(`/Organizations`, request.url));;
     default: return response
   }

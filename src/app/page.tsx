@@ -9,17 +9,17 @@ import { useCookies } from "react-cookie";
 export default function Reroute() {
   const router = useRouter();
   const pathname = usePathname();
-  const [cookies] = useCookies(['redirect']); 
+  const [cookies,,removeCookie] = useCookies(['redirect']); 
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const session = await fetchAuthSession();
-        console.log(cookies.redirect)
 
         if (session.userSub && session.tokens) {
           if (cookies.redirect) {
             router.push(cookies.redirect);
+            removeCookie("redirect", { path: "/" });
           }
           else if (pathname === "/Auth" || pathname === "/") {
             router.push("/Organizations");

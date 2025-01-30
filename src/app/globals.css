@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @tailwind utilities;
 
-:root {
+:root, #root, #docs-root {
   --color-0: rgba(251, 193, 159,1);
   --color-1: rgba(243, 94, 67,1);
   --color-2: rgba(127, 81, 58,1);

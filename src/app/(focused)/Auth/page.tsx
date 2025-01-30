@@ -5,11 +5,12 @@ import { Authenticator, Button, Heading, useAuthenticator, useTheme, View, Text 
 import logo from '@/assets/MyRewardsLogo3.svg'
 import Image from "next/image";
 import { useSearchParams } from "next/dist/client/components/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useCookies } from "react-cookie";
+import Loading from "@/components/loading";
 
-const Authentication = () => {
-  const [, setCookie] = useCookies(["redirect"]);
+const AuthContent = () => {
+  const [, setCookie, removeCookie] = useCookies(["redirect"]);
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get("redirect");
 
@@ -18,14 +19,24 @@ const Authentication = () => {
       setCookie("redirect", redirectPath, {
         path: "/",
         secure: true
-    });    
-  }
-  }, [redirectPath]);
+      });    
+    }else{
+      removeCookie("redirect", { path: "/" });
+    }
+  }, [redirectPath, setCookie]);
 
   return (
     <div className='flex flex-1 justify-center pb-5'>
       <Authenticator components={components} formFields={formFields} />
     </div>
+  );
+};
+
+const Authentication = () => {
+  return (
+    <Suspense fallback={<Loading />}>
+      <AuthContent />
+    </Suspense>
   );
 };
 
