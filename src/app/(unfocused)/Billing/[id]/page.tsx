@@ -1,6 +1,5 @@
 import ClientComponent from "./clientPage"
 // import { userSession } from "@/components/amplify-server-methods";
-import {loadStripe} from '@stripe/stripe-js';
 
 export interface BillingInfo {
   id: string
@@ -14,7 +13,7 @@ export const revalidate = 60;
 function mockApi({ id }: { id: string }): Promise<BillingInfo|null> {
   // const session = await userSession()
   console.log(id)
-  
+
   try{
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -40,9 +39,6 @@ export default async function Page({
   }) {
     const id = (await params).id
     const data = await mockApi({id});
-    const stripePromise = loadStripe('pk_test_51QlaNVLvDQv3Uhkhl5XvNKxq52FxU9fCK63vTjDaFcHNvjHoOMDAtntMsjUmbTdxLITYZQUKmwLqOM7EtF3FOUaU00NbcsNrXN');
-
-    console.log(stripePromise)
 
     if(data){
       return (

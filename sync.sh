@@ -37,7 +37,7 @@ echo "You selected profile: $selected_profile"
 
 # Try to fetch parameters without logging in
 echo "Fetching AWS Parameters using profile: $selected_profile..."
-PARAMS=$(aws ssm get-parameters --names "/myRewardsApp/$APP_ENV/businessUserPoolId" "/myRewardsApp/$APP_ENV/businessWebClientId" "/myRewardsApp/$APP_ENV/businessCognitoDomain" "/myRewardsApp/$APP_ENV/identityPoolIdBusiness" --with-decryption --region us-east-1 --profile "$selected_profile" 2>/dev/null)
+PARAMS=$(aws ssm get-parameters --names "/myRewardsApp/$APP_ENV/businessUserPoolId" "/myRewardsApp/$APP_ENV/businessWebClientId" "/myRewardsApp/$APP_ENV/businessCognitoDomain" "/myRewardsApp/$APP_ENV/identityPoolIdBusiness" "/myRewardsApp/$APP_ENV/stripeKey" "/myRewardsApp/$APP_ENV/squareClientId" --with-decryption --region us-east-1 --profile "$selected_profile" 2>/dev/null)
 
 if [[ $? -ne 0 ]]; then
     echo "AWS SSO session expired or invalid. Logging in with profile: $selected_profile..."
@@ -49,7 +49,7 @@ if [[ $? -ne 0 ]]; then
 
     # Retry fetching parameters after login
     echo "Retrying fetch of AWS Parameters..."
-    PARAMS=$(aws ssm get-parameters --names "/myRewardsApp/$APP_ENV/businessUserPoolId" "/myRewardsApp/$APP_ENV/businessWebClientId" "/myRewardsApp/$APP_ENV/businessCognitoDomain" "/myRewardsApp/$APP_ENV/identityPoolIdBusiness" --with-decryption --region us-east-1 --profile "$selected_profile")
+    PARAMS=$(aws ssm get-parameters --names "/myRewardsApp/$APP_ENV/businessUserPoolId" "/myRewardsApp/$APP_ENV/businessWebClientId" "/myRewardsApp/$APP_ENV/businessCognitoDomain" "/myRewardsApp/$APP_ENV/identityPoolIdBusiness" "/myRewardsApp/$APP_ENV/stripeKey" "/myRewardsApp/$APP_ENV/squareClientId" --with-decryption --region us-east-1 --profile "$selected_profile")
     
     if [[ $? -ne 0 ]]; then
         echo "Error: Failed to fetch AWS parameters after logging in. Please check your profile, permissions, or network connectivity."
@@ -62,6 +62,8 @@ USER_POOL_ID=$(echo "$PARAMS" | jq -r ".Parameters[] | select(.Name==\"/myReward
 WEB_CLIENT_ID=$(echo "$PARAMS" | jq -r ".Parameters[] | select(.Name==\"/myRewardsApp/$APP_ENV/businessWebClientId\").Value")
 COGNITO_DOMAIN=$(echo "$PARAMS" | jq -r ".Parameters[] | select(.Name==\"/myRewardsApp/$APP_ENV/businessCognitoDomain\").Value")
 IDENTITY_POOL_ID=$(echo "$PARAMS" | jq -r ".Parameters[] | select(.Name==\"/myRewardsApp/$APP_ENV/identityPoolIdBusiness\").Value")
+STRIPE_KEY=$(echo "$PARAMS" | jq -r ".Parameters[] | select(.Name==\"/myRewardsApp/$APP_ENV/stripeKey\").Value")
+SQUARE_CLIENT_ID=$(echo "$PARAMS" | jq -r ".Parameters[] | select(.Name==\"/myRewardsApp/$APP_ENV/squareClientId\").Value")
 
 # Write to .env file
 echo "NEXT_PUBLIC_USERPOOL_ID=$USER_POOL_ID" > .env
@@ -70,5 +72,7 @@ echo "NEXT_PUBLIC_COGNITO_DOMAIN=$COGNITO_DOMAIN" >> .env
 echo "NEXT_PUBLIC_IDENTITY_POOL_ID=$IDENTITY_POOL_ID" >> .env
 echo "NEXT_PUBLIC_AWS_REGION=us-east-1" >> .env
 echo "NEXT_PUBLIC_APP_ENV=$APP_ENV" >> .env
+echo "NEXT_PUBLIC_STRIPE_KEY=$STRIPE_KEY" >> .env
+echo "NEXT_PUBLIC_SQUARE_CLIENT=$SQUARE_CLIENT_ID" >> .env
 
 echo "($APP_ENV) .env file updated successfully!"

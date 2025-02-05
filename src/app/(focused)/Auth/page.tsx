@@ -8,11 +8,14 @@ import { useSearchParams } from "next/dist/client/components/navigation";
 import { Suspense, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import Loading from "@/components/loading";
+import { fetchAuthSession} from "@aws-amplify/auth";
+import { useRouter } from "next/navigation";
 
 const AuthContent = () => {
   const [, setCookie, removeCookie] = useCookies(["redirect"]);
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get("redirect");
+  const router = useRouter()
 
   useEffect(() => {
     if (redirectPath) {
@@ -24,6 +27,17 @@ const AuthContent = () => {
       removeCookie("redirect", { path: "/" });
     }
   }, [redirectPath, setCookie]);
+
+  useEffect(()=>{
+    async function fetchUser(){
+      const sesh = await fetchAuthSession();
+
+      if(sesh.tokens){
+        router.replace('/Organizations')
+      }
+    }
+    fetchUser();
+  },[])
 
   return (
     <div className='flex flex-1 justify-center pb-5'>
