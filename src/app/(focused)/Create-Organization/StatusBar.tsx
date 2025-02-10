@@ -1,9 +1,8 @@
 "use client";
 import { color_pallete } from "@/static/colors";
-import { STEPS } from "./page";
+import { STEPS } from "@/static/constants";
 
 export default function StatusBar({ position }: { position: number }) {
-
   return (
     <div className="flex border-t-2 border-b-2 justify-around" style={{ borderColor: color_pallete[3] }}>
       {STEPS.map((label, index) => {
