@@ -32,6 +32,12 @@ export default function ClientComponent({ data }: { data: OrgProps[] }) {
           </p>
         </Link>
       ))}
+      <Link
+        href={`/Create-Organization`} 
+        shallow={false}
+        prefetch={true}>
+           Add account
+      </Link>
     </div>
   );
 }

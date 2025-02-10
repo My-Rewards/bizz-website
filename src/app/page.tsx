@@ -15,21 +15,29 @@ export default function Reroute() {
     const checkAuth = async () => {
       try {
         const session = await fetchAuthSession();
-
+        
         if (session.userSub && session.tokens) {
           if (cookies.redirect) {
-            router.push(cookies.redirect);
-            removeCookie("redirect", { path: "/" });
+            const path = cookies.redirect;
+
+            removeCookie('redirect', {
+              path: '/',
+              domain: window.location.hostname,
+              secure: true,
+              sameSite: 'strict'
+            });
+
+            router.push(path);
           }
-          else if (pathname === "/Auth" || pathname === "/") {
+          else if (pathname === "/Login" || pathname === "/SignU" || pathname === "/") {
             router.push("/Organizations");
           }
         } else if (pathname === "/" || pathname === "/Organizations") {
-          router.push("/Auth");
+          router.push("/Login");
         }
       } catch (error) {
         console.error("Error during authentication:", error);
-        router.push("/Auth");
+        router.push("/Login");
       }
     };
     checkAuth();

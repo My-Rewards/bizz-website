@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import logo from "@/assets/MyRewardsLogo3(2).svg";
 import Image from "next/image";
 import './navbar.css'
+import { color_pallete } from "@/static/colors";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -29,7 +30,10 @@ const Navbar = () => {
     return (
       <div className="navbar">
         <div className="spacer">
-          <Image src={logo} alt="MyRewards Logo" height={50} />
+          <div className="flex relative w-fit">
+            <Image src={logo} alt="MyRewards Logo" height={50}/>
+            {process.env.NEXT_PUBLIC_APP_ENV === 'beta' && <span className="absolute -top-1 -right-4 rounded-full px-2 text-white font-bold text-xs" style={{backgroundColor:color_pallete[3]}}>Beta</span>}
+          </div>
         </div>
         <div className="nav-options">
             <Link

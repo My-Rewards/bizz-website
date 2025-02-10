@@ -34,6 +34,7 @@ export const userSession = async ()=>{
           userSub: session.userSub
         }
       } catch {
+        console.log('null')
         return {
           token: null,
           userSub: null
@@ -50,6 +51,7 @@ export const validSession = async ()=>{
     operation: async (contextSpec) => {
       try {
         const session = await Auth.fetchAuthSession(contextSpec);
+
         return session.tokens?.idToken === undefined;
       } catch {
         return false

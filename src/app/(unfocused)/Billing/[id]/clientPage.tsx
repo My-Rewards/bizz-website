@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BillingInfo } from "./page";
 import {
   PaymentElement,
@@ -8,10 +8,9 @@ import {
   useElements,
   AddressElement
 } from '@stripe/react-stripe-js';
-import { StripeElementsOptions, StripePaymentElementOptions, StripeAddressElementOptions } from '@stripe/stripe-js';
+import { StripeElementsOptions, StripePaymentElementOptions, StripeAddressElementOptions, Stripe } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-const stripePromise = process.env.NEXT_PUBLIC_STRIPE_KEY ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY) : null;
 
 const options: StripeElementsOptions = {
   mode: 'subscription',
@@ -55,6 +54,13 @@ const options: StripeElementsOptions = {
 
 export default function ClientComponent({ data }: { data: BillingInfo }) {
   const [addPM, setAddPM] = useState(false);
+  const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
+
+  useEffect(() => {
+    if (addPM && !stripePromise) {
+      setStripePromise(loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!));
+    }
+  }, [addPM, stripePromise]);
 
   return (
     <div className="flex flex-1 flex-row">
