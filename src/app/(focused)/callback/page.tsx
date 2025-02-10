@@ -66,7 +66,7 @@ export default function CallBack() {
             }
         }
         connectSquare();
-    }, []);
+    }, [cookies.square_state, router]);
     
   return(<Loading/>);
 }

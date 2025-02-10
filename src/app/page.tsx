@@ -41,7 +41,7 @@ export default function Reroute() {
       }
     };
     checkAuth();
-  }, [pathname, router]);
+  }, [pathname, router, cookies.redirect, removeCookie]);
 
   return (<Loading />);
 }

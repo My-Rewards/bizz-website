@@ -4,7 +4,7 @@ import StatusBar from "./StatusBar";
 import { useState } from "react";
 import { FaChevronLeft } from "react-icons/fa6";
 import { color_pallete } from "@/static/colors";
-import { STEPS } from "./page";
+import { STEPS } from "@/static/constants";
 
 const MAXSTEPS = 3;
 

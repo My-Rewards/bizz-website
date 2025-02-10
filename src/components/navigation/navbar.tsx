@@ -22,7 +22,7 @@ const Navbar = () => {
     window.addEventListener("resize", updateWidth);
 
     return () => window.removeEventListener("resize", updateWidth);
-  }, []);
+  }, [windowWidth]);
 
   const isActive = (path: string) => pathname.includes(path);
   
