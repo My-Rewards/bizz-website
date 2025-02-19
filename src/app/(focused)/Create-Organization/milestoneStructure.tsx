@@ -1,29 +1,36 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
 import MyRewardsLogo from "@/assets/MyRewardsLogo3(2).svg";
-import { useRouter } from "next/navigation";
 import { FaChevronLeft } from "react-icons/fa6";
+import {color_pallete} from "@/static/colors";
 
-export default function MilestoneStructure({ nextStep, prevStep }: { nextStep: () => void; prevStep: () => void }) {
-    const [pointsPerDollar, setPointsPerDollar] = useState("");
-    const [rewardOptions, setRewardOptions] = useState(["", "", ""]);
+export default function MilestoneStructure({
+                                               nextStepAction,
+                                               prevStepAction,
+                                               formData,
+                                               setFormDataAction,
+                                           }: {
+    nextStepAction: () => void;
+    prevStepAction: () => void;
+    formData: any;
+    setFormDataAction: React.Dispatch<React.SetStateAction<any>>;
+}) {
 
-    const router = useRouter(); // Router for navigation
-
-    // Handle Reward Option Input
     const handleRewardChange = (index: number, value: string) => {
-        const newRewards = [...rewardOptions];
-        newRewards[index] = value;
-        setRewardOptions(newRewards);
+        setFormDataAction((prev: any) => {
+            const newRewards = [...prev.milestoneRewards];
+            newRewards[index] = value;
+            return { ...prev, milestoneRewards: newRewards };
+        });
     };
+
 
     return (
         <div className="flex flex-1 flex-col gap-6 items-center relative">
 
             {/* Back Button */}
             <div className="absolute top-0 left-0">
-                <button className="px-4 py-4 cursor-pointer" onClick={prevStep}>
+                <button className="px-4 py-4 cursor-pointer" onClick={prevStepAction}>
                     <FaChevronLeft size={35} color="#7F513A"/>
                 </button>
             </div>
@@ -64,10 +71,14 @@ export default function MilestoneStructure({ nextStep, prevStep }: { nextStep: (
                     <input
                         type="text"
                         placeholder="X"
-                        value={pointsPerDollar}
-                        onChange={(e) => setPointsPerDollar(e.target.value)}
+                        value={formData.pointsPerDollar} // Uses formData
+                        onChange={(e) => setFormDataAction((prev: any) => ({
+                            ...prev,
+                            pointsPerDollar: e.target.value
+                        }))} // Updates formData
                         className="w-[50px] h-[40px] text-center border border-[#7F513A] rounded-md text-[#7F513A] font-semibold text-lg"
                     />
+
                     <span className="ml-3 text-[#7F513A]">points for $1</span>
                 </div>
                 {/* Recommendation text should be below, not next to input */}
@@ -80,7 +91,7 @@ export default function MilestoneStructure({ nextStep, prevStep }: { nextStep: (
                 <p className="text-[#7F513A] italic text-[16px]">Choose up to 3 reward options</p>
 
                 {/* Reward Option Inputs */}
-                {rewardOptions.map((reward, index) => (
+                {formData.milestoneRewards.map((reward: string, index: number) => (
                     <div key={index} className="flex flex-col mt-4">
                         <label className="text-[#7F513A] text-[18px] font-semibold">
                             {index === 0 ? <span className="text-red-700">*</span> : null} Option #{index + 1}
@@ -94,13 +105,14 @@ export default function MilestoneStructure({ nextStep, prevStep }: { nextStep: (
                         />
                     </div>
                 ))}
+
             </div>
 
             {/* Next Button */}
             <button
                 className="px-4 py-2 text-white rounded-lg mt-10 mb-16 cursor-pointer w-60"
-                style={{ backgroundColor: "#7F513A" }}
-                onClick={nextStep}
+                style={{backgroundColor: color_pallete[3]}}
+                onClick={nextStepAction}
             >
                 Next
             </button>

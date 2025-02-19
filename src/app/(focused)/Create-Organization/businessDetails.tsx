@@ -1,41 +1,58 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
 import MyRewardsLogo from "@/assets/MyRewardsLogo3(2).svg";
 import UploadIcon from "@/assets/upload.svg"; // Upload icon
 import PhoneImage from "@/assets/phone.svg"; // Phone illustration
 import { color_pallete } from "@/static/colors";
 
-export default function BusinessDetails({ nextStep }: { nextStep: () => void }) {
-    const [selectedTags, setSelectedTags] = useState<string[]>([]);
-    const [logo, setLogo] = useState<File | null>(null);
-    const [banner, setBanner] = useState<File | null>(null);
+export default function BusinessDetails({
+                                            nextStepAction,
+                                            formData,
+                                            setFormDataAction,
+                                        }: {
+    nextStepAction: () => void;
+    formData: any;
+    setFormDataAction: React.Dispatch<React.SetStateAction<any>>;
+}) {
 
-    // Business Tag Options
+
     const tagOptions = [
         "Cafe", "Health Food", "Organic", "Bakery", "Vegan", "Food Truck",
         "Family-Owned", "Brunch Spot", "Local Ingredients", "Farm-to-Table"
     ];
 
-    // Handle Tag Selection
+
     const handleTagSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const newTag = event.target.value;
-        if (newTag && !selectedTags.includes(newTag) && selectedTags.length < 3) {
-            setSelectedTags([...selectedTags, newTag]);
+        if (newTag && !formData.businessTags.includes(newTag) && formData.businessTags.length < 3) {
+            setFormDataAction((prev: any) => ({
+                ...prev,
+                businessTags: [...prev.businessTags, newTag]
+            }));
         }
     };
 
-    // Remove Selected Tag
+
     const removeTag = (tag: string) => {
-        setSelectedTags(selectedTags.filter(t => t !== tag));
+        setFormDataAction((prev: any) => ({
+            ...prev,
+            businessTags: prev.businessTags.filter((t: string) => t !== tag)
+        }));
     };
+
 
     // Handle File Upload for Logo & Banner
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, type: "logo" | "banner") => {
         const file = event.target.files?.[0];
         if (file) {
-            if (type === "logo") setLogo(file);
-            else setBanner(file);
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                setFormDataAction((prev: any) => ({
+                    ...prev,
+                    [type]: reader.result
+                }));
+            };
         }
     };
 
@@ -77,6 +94,11 @@ export default function BusinessDetails({ nextStep }: { nextStep: () => void }) 
                 <input
                     type="text"
                     placeholder="Business Name"
+                    value={formData.businessName} // Uses formData
+                    onChange={(e) => setFormDataAction((prev: any) => ({
+                        ...prev,
+                        businessName: e.target.value
+                    }))} // Updates formData
                     className="mt-2 w-full h-[50px] px-4 border border-[#7F513A] rounded-md focus:outline-none focus:ring-2 focus:ring-[#7F513A] bg-transparent text-[#7F513A]"
                 />
             </div>
@@ -89,6 +111,11 @@ export default function BusinessDetails({ nextStep }: { nextStep: () => void }) 
                 </label>
                 <textarea
                     placeholder="Business Description"
+                    value={formData.businessDescription} // Use formData
+                    onChange={(e) => setFormDataAction((prev: any) => ({
+                        ...prev,
+                        businessDescription: e.target.value
+                    }))} // Update formData
                     className="mt-2 w-full h-[100px] px-4 py-2 border border-[#7F513A] rounded-md focus:outline-none focus:ring-2 focus:ring-[#7F513A] bg-transparent text-[#7F513A] resize-none"
                 />
             </div>
@@ -113,8 +140,9 @@ export default function BusinessDetails({ nextStep }: { nextStep: () => void }) 
 
                 {/* Display Selected Tags */}
                 <div className="flex gap-2 flex-wrap mt-2">
-                    {selectedTags.map((tag) => (
-                        <div key={tag} className="flex items-center px-4 py-2 border border-[#7F513A] rounded-full text-[#7F513A]">
+                    {formData.businessTags.map((tag: string) => (
+                        <div key={tag}
+                             className="flex items-center px-4 py-2 border border-[#7F513A] rounded-full text-[#7F513A]">
                             {tag}
                             <button onClick={() => removeTag(tag)} className="ml-2 text-red-700 font-bold">×</button>
                         </div>
@@ -132,17 +160,21 @@ export default function BusinessDetails({ nextStep }: { nextStep: () => void }) 
                             <span className="text-red-700">*</span> Logo Image
                             <span className="text-[#E58D6D] italic text-[16px]"> (XXXxXXXpx)</span>
                         </label>
-                        <label className="mt-2 flex flex-col items-center justify-center w-full h-[150px] border border-[#7F513A] rounded-md cursor-pointer">
-                            {logo ? (
-                                <p className="text-[#7F513A]">{logo.name}</p>
+                        <label
+                            className="mt-2 flex flex-col items-center justify-center w-full h-[150px] border border-[#7F513A] rounded-md cursor-pointer">
+                            {formData.logo ? (
+                                <Image src={formData.logo} alt="Business Logo" width={150} height={150}
+                                       className="rounded-md"/>
                             ) : (
                                 <>
                                     <Image src={UploadIcon} alt="Upload Icon" width={40} height={40}/>
-                                    <p className="text-[#7F513A] mt-2">drag image here</p>
+                                    <p className="text-[#7F513A] mt-2">Drag image here</p>
                                 </>
                             )}
-                            <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(e, "logo")} />
+                            <input type="file" accept="image/*" className="hidden"
+                                   onChange={(e) => handleFileChange(e, "logo")}/>
                         </label>
+
                     </div>
 
                     {/* Banner Upload */}
@@ -151,17 +183,21 @@ export default function BusinessDetails({ nextStep }: { nextStep: () => void }) 
                             <span className="text-red-700">*</span> Banner Image
                             <span className="text-[#E58D6D] italic text-[16px]"> (XXXxXXXpx)</span>
                         </label>
-                        <label className="mt-2 flex flex-col items-center justify-center w-full h-[150px] border border-[#7F513A] rounded-md cursor-pointer">
-                            {banner ? (
-                                <p className="text-[#7F513A]">{banner.name}</p>
+                        <label
+                            className="mt-2 flex flex-col items-center justify-center w-full h-[150px] border border-[#7F513A] rounded-md cursor-pointer">
+                            {formData.banner ? (
+                                <Image src={formData.banner} alt="Business Banner" width={300} height={150}
+                                       className="rounded-md"/>
                             ) : (
                                 <>
                                     <Image src={UploadIcon} alt="Upload Icon" width={40} height={40}/>
-                                    <p className="text-[#7F513A] mt-2">drag image here</p>
+                                    <p className="text-[#7F513A] mt-2">Drag image here</p>
                                 </>
                             )}
-                            <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(e, "banner")} />
+                            <input type="file" accept="image/*" className="hidden"
+                                   onChange={(e) => handleFileChange(e, "banner")}/>
                         </label>
+
                     </div>
                 </div>
 
@@ -175,8 +211,8 @@ export default function BusinessDetails({ nextStep }: { nextStep: () => void }) 
             {/* Next Button with Extra Space Below */}
             <button
                 className="px-4 py-2 text-white rounded-lg mt-10 mb-16 cursor-pointer w-60"
-                style={{ backgroundColor: color_pallete[3] }}
-                onClick={nextStep}
+                style={{backgroundColor: color_pallete[3]}}
+                onClick={nextStepAction}
             >
                 Next
             </button>

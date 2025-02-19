@@ -17,6 +17,24 @@ export default function ClientComponent() {
     const router = useRouter();
     const [step, setStep] = useState(1);
 
+    const handleSubmit = () => {
+        console.log("Form Submitted!", formData);
+        // You can send formData to an API or process it here
+    };
+
+    const [formData, setFormData] = useState({
+        businessName: "",
+        businessDescription: "",
+        businessTags: [],
+        logo: "",
+        banner: "",
+        pointsPerDollar: 0,
+        loyaltyRewards: [["", "", ""], ["", "", ""], ["", "", ""]],
+        milestoneRewards: ["", "", ""],
+        visitsUntilNextTier: "",
+    });
+
+
     const handleBack = () => {
         if (step > 1) {
             setStep(step - 1);
@@ -37,13 +55,36 @@ export default function ClientComponent() {
         <div className="flex flex-1 flex-col">
             <StatusBar position={step - 1} /> {/* Keeps progress tracking */}
             <div className="flex flex-1">
-                <Pages step={step} handleBack={handleBack} handleNext={handleNext} />
+                <Pages
+                    step={step}
+                    handleBack={handleBack}
+                    handleNext={handleNext}
+                    submitForm={handleSubmit}
+                    formData={formData}
+                    setFormData={setFormData}
+                />
+
             </div>
         </div>
     );
 }
 
-function Pages({ step, handleBack, handleNext }: { step: number; handleBack: () => void; handleNext: () => void }) {
+function Pages({
+                   step,
+                   handleBack,
+                   handleNext,
+                   submitForm,
+                   formData,
+                   setFormData
+               }: {
+    step: number;
+    handleBack: () => void;
+    handleNext: () => void;
+    submitForm: () => void;
+    formData: any;
+    setFormData: React.Dispatch<React.SetStateAction<any>>;
+}) {
+
     return (
         <div className="flex flex-1 relative gap-2 flex-col align-middle">
             {/* Back Button */}
@@ -54,10 +95,11 @@ function Pages({ step, handleBack, handleNext }: { step: number; handleBack: () 
             </div>
 
             {/* Step Components (Dynamically Rendered) */}
-            {step === 1 && <BusinessDetails nextStep={handleNext} />}
-            {step === 2 && <MilestoneStructure nextStep={handleNext} prevStep={handleBack} />}
-            {step === 3 && <LoyaltyStructure nextStep={handleNext} prevStep={handleBack} />}
-            {step === 4 && <ConfirmInformation prevStep={handleBack} />}
+            {step === 1 && <BusinessDetails nextStepAction={handleNext} formData={formData} setFormDataAction={setFormData} />}
+            {step === 2 && <MilestoneStructure nextStepAction={handleNext} prevStepAction={handleBack} formData={formData} setFormDataAction={setFormData} />}
+            {step === 3 && <LoyaltyStructure nextStepAction={handleNext} prevStepAction={handleBack} formData={formData} setFormDataAction={setFormData} />}
+            {step === 4 && <ConfirmInformation prevStepAction={handleBack} submitFormAction={submitForm} formData={formData} />}
+
         </div>
     );
 }
